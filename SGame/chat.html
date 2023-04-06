@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area 51</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #1E1E1E;
+            overflow: hidden
+        }
+
+        #chat {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            margin-right: -16px;
+        }
+
+        #input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #36393F;
+            border-top: 1px solid #2F3136;
+            padding: 8px;
+        }
+
+        #input input {
+            flex: 1;
+            font-family: 'Open Sans';
+            margin-right: 8px;
+            background-color: #40444B;
+            border: none;
+            color: #DCDDDE;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #input button {
+            background-color: #7289DA;
+            font-family: 'Roboto';
+            color: #DCDDDE;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .message-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin: 8px 0;
+            align-items: flex-end;
+            animation: fadeInRight .3s both;
+        }
+
+        .message {
+            background-color: #7289DA;
+            color: #fff;
+            font-family: 'Open Sans';
+            padding: 8px 16px;
+            border-radius: 16px;
+            max-width: 60%;
+            word-wrap: break-word;
+            margin: 0 8px;
+            animation: slideInRight .3s both;
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            background-color: #1E1E1E;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat" height="768px" width="1000px">
+        <div id="messages"></div>
+        <div id="input">
+            <input type="text" placeholder="Type a message..." maxlength="2000">
+            <button>Send</button>
+        </div>
+    </div>
+    <script>
+        const messages = document.getElementById("messages"),
+            input = document.querySelector("#input input"),
+            button = document.querySelector("#input button");
+
+        // read chat history from file and display it
+        fetch("chat_history.txt")
+            .then((response) => response.text())
+            .then((data) => {
+                const history = data.split("\n");
+                history.forEach((message) => {
+                    if (message.trim() !== "") {
+                        addMessage(message.trim(), false);
+                    }
+                });
+            });
+
+        function addMessage(a) {
+            const b = document.createElement("div"),
+                c = document.createElement("div");
+
+            b.classList.add("message-wrapper"),
+                c.classList.add("message"),
+                c.textContent = a, b.appendChild(c),
+                messages.appendChild(b),
+                setTimeout(() => { b.classList.remove("fadeInRight") }, 300)
+        }
+
+        button.addEventListener("click", () => { const a = input.value.trim(); a !== "" && addMessage(a), input.value = "" }),
+            input.addEventListener("keydown", a => {
+                a.key === "Enter" && (a.preventDefault(),
+                    a.stopPropagation(), button.click())
+            }),
+            messages.addEventListener("DOMNodeInserted", () => { messages.scrollTop = messages.scrollHeight })
+    </script>
+</body>
+
+</html>
