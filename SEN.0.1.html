@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad</title>
+    <style>
+        body {
+            background-color: #d8c3a5;
+            font-family: 'IM Fell English', serif;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        textarea {
+            background-color: #e6ccb3;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            font-family: 'IM Fell English', serif;
+            font-size: 20px;
+            padding: 10px;
+            resize: none;
+            width: 80%;
+            outline: none;
+        }
+
+        button {
+            background-color: #8b4513;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-family: 'IM Fell English', serif;
+            font-size: 20px;
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #a0522d;
+        }
+
+        @media screen and (max-width: 600px) {
+            textarea {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+
+        .forest-theme body {
+            background-color: #8BC34A;
+            background-image: url(forest.jpg);
+            background-repeat: repeat;
+            background-size: cover;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="text" rows="20" cols="100"></textarea>
+
+    <script>
+        function saveFile() {
+            var text = document.getElementById('text').value;
+            var filename = prompt('Enter filename');
+            if (filename) {
+                var extension = prompt('Enter file extension (e.g. txt)');
+                if (extension) {
+                    if (!extension.startsWith('.')) {
+                        extension = '.' + extension;
+                    }
+                    var blob = new Blob([text], { type: 'text/plain' });
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename + extension;
+                    link.click();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 's' && event.ctrlKey) {
+                event.preventDefault(); // prevent the default behavior of saving the page
+                saveFile();
+            }
+        });
+    </script>
+</body>
+</html>
